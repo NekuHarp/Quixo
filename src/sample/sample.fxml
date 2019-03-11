@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="572.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <ImageView fx:id="ImgTopLeft" fitHeight="100.0" fitWidth="100.0" layoutX="60.0" layoutY="90.0" pickOnBounds="true" userData="00">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgTopCenter" fitHeight="100.0" fitWidth="100.0" layoutX="180.0" layoutY="90.0" pickOnBounds="true" userData="01">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgTopRight" fitHeight="100.0" fitWidth="100.0" layoutX="300.0" layoutY="90.0" pickOnBounds="true" userData="02">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgCenterLeft" fitHeight="100.0" fitWidth="100.0" layoutX="60.0" layoutY="210.0" pickOnBounds="true" userData="10">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgCenterCenter" fitHeight="100.0" fitWidth="100.0" layoutX="180.0" layoutY="210.0" pickOnBounds="true" userData="11">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgCenterRight" fitHeight="100.0" fitWidth="100.0" layoutX="300.0" layoutY="210.0" pickOnBounds="true" userData="12">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgBottomLeft" fitHeight="100.0" fitWidth="100.0" layoutX="60.0" layoutY="330.0" pickOnBounds="true" userData="20">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgBottomCenter" fitHeight="100.0" fitWidth="100.0" layoutX="180.0" layoutY="330.0" pickOnBounds="true" userData="21">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ImgBottomRight" fitHeight="100.0" fitWidth="100.0" layoutX="300.0" layoutY="330.0" pickOnBounds="true" userData="22">
+         <image>
+            <Image url="@../../../../Bureau/Analyse%20de%20donnes/TP2/TP2%20%20ACP-20190225/auto.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
