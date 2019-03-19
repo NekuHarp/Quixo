@@ -235,7 +235,6 @@ public class Controller {
         if(full==true){
             return 3;
         }
-
         if(     ((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==1)||
                 ((grille[0]==grille[3])&&(grille[3]==grille[6])&&grille[0]==1)||
                 ((grille[0]==grille[4])&&(grille[4]==grille[8])&&grille[0]==1)||
@@ -246,9 +245,7 @@ public class Controller {
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==1)){
 
             return 1;
-
         }
-
         if(     ((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==2)||
                 ((grille[0]==grille[3])&&(grille[3]==grille[6])&&grille[0]==2)||
                 ((grille[0]==grille[4])&&(grille[4]==grille[8])&&grille[0]==2)||
@@ -259,11 +256,8 @@ public class Controller {
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==2)){
 
             return 2;
-
         }
-
         return 0;
-
     }
 
     private void deletehandler(){
