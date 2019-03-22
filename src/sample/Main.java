@@ -19,8 +19,9 @@ public class Main extends Application {
         Parent root = loader.load();
         Controller controller = loader.getController();
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Morpion-kun");
         primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setResizable(false);
 
         d.test();
         System.out.println(controller==null);

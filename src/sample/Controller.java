@@ -1,5 +1,9 @@
 package sample;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 public class Controller {
     Main.data d;
@@ -54,12 +59,20 @@ public class Controller {
         @Override public void handle(ActionEvent e) {
             reecrire(0,0,0);
             joueur=1;
+            if(joueur==1){
+                result.setText("Tour de Joueur O");
+            } else {
+                result.setText("Tour de Joueur X");
+            }
         }
     });
         eventH = new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent e) {
                 Node node = (Node) e.getSource() ;
-
+                /*ScaleTransition st = new ScaleTransition(Duration.millis(200), ImgTopLeft);
+                st.setFromX(1);
+                st.setToX(1.2);
+                st.play();*/
                 String data = (String) node.getUserData();
                 int x= Character.getNumericValue(data.charAt(0));
                 int y= Character.getNumericValue(data.charAt(1));
@@ -70,6 +83,7 @@ public class Controller {
                     joueur--;
                 }
                 System.out.println("X="+x+" Y="+y+" Joueur="+joueur);
+
                 resultat = vresult();
 
                 if(resultat!=0){
@@ -83,6 +97,12 @@ public class Controller {
                         deletehandler();
                         result.setText("Match nul !");
                     }
+                } else {
+                    if(joueur==1){
+                        result.setText("Tour de Joueur O");
+                    } else {
+                        result.setText("Tour de Joueur X");
+                    }
                 }
             }
         };
@@ -94,8 +114,8 @@ public class Controller {
 
     }
 
-    private void reecrire(int joueur, int x, int y){
-        if(joueur == 1){
+    private void reecrire(int j, int x, int y){
+        if(j == 1){
             if(x==0){
                 if(y==0){
                     ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
@@ -140,7 +160,7 @@ public class Controller {
                 }
             }
 
-        } else if(joueur == 2) {
+        } else if(j == 2) {
             if(x==0){
                 if(y==0){
                     ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
@@ -212,7 +232,11 @@ public class Controller {
             ImgBottomCenter.addEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
             ImgBottomRight.addEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
 
-            result.setText(" ");
+            if(joueur==1){
+                result.setText("Tour de Joueur O");
+            } else {
+                result.setText("Tour de Joueur X");
+            }
 
             for (int i = 0; i < grille.length; i++){
                 grille[i]=0;
@@ -232,9 +256,6 @@ public class Controller {
                 full = false;
             }
         }
-        if(full==true){
-            return 3;
-        }
         if(     ((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==1)||
                 ((grille[0]==grille[3])&&(grille[3]==grille[6])&&grille[0]==1)||
                 ((grille[0]==grille[4])&&(grille[4]==grille[8])&&grille[0]==1)||
@@ -244,6 +265,46 @@ public class Controller {
                 ((grille[3]==grille[4])&&(grille[4]==grille[5])&&grille[3]==1)||
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==1)){
 
+            if((grille[0]==grille[1])&&(grille[1]==grille[2])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[0]==grille[3])&&(grille[3]==grille[6])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[0]==grille[4])&&(grille[4]==grille[8])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[6]==grille[7])&&(grille[7]==grille[8])){
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[2]==grille[5])&&(grille[5]==grille[8])){
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[2]==grille[4])&&(grille[4]==grille[6])){
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[3]==grille[4])&&(grille[4]==grille[5])){
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
+            if((grille[1]==grille[4])&&(grille[4]==grille[7])){
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+            }
             return 1;
         }
         if(     ((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==2)||
@@ -255,7 +316,50 @@ public class Controller {
                 ((grille[3]==grille[4])&&(grille[4]==grille[5])&&grille[3]==2)||
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==2)){
 
+            if((grille[0]==grille[1])&&(grille[1]==grille[2])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[0]==grille[3])&&(grille[3]==grille[6])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[0]==grille[4])&&(grille[4]==grille[8])){
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[6]==grille[7])&&(grille[7]==grille[8])){
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[2]==grille[5])&&(grille[5]==grille[8])){
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[2]==grille[4])&&(grille[4]==grille[6])){
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[3]==grille[4])&&(grille[4]==grille[5])){
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
+            if((grille[1]==grille[4])&&(grille[4]==grille[7])){
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+            }
             return 2;
+        }
+        if(full==true){
+            return 3;
         }
         return 0;
     }
