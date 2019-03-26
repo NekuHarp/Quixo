@@ -20,7 +20,7 @@ public class Main extends Application {
         Controller controller = loader.getController();
 
         primaryStage.setTitle("Morpion-kun");
-        primaryStage.setScene(new Scene(root, 400, 600));
+        primaryStage.setScene(new Scene(root, 500, 600));
         primaryStage.setResizable(false);
 
         d.test();

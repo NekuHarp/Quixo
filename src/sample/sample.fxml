@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -13,142 +16,267 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <GridPane alignment="CENTER" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         </rowConstraints>
+      <Pane fx:id="optionpane" disable="true" opacity="0.0" prefHeight="600.0" prefWidth="500.0">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blanka.png" />
-               </image>
-            </ImageView>
-         </children>
-      </GridPane>
-      <GridPane fx:id="grillemorpion" alignment="CENTER" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Options">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="75.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Symbole du Joueur 1" />
+               </children></HBox>
+            <HBox alignment="CENTER" layoutX="200.0" layoutY="150.0" prefHeight="50.0" prefWidth="100.0">
+               <children>
+                  <SplitPane dividerPositions="0.5" prefHeight="50.0" prefWidth="100.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="45.0">
+                                 <children>
+                                    <Button fx:id="osymbtn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="O" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="45.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="X" fx:id="xsymbtn" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="200.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Type du Joueur 2" />
+               </children></HBox>
+            <HBox alignment="CENTER" layoutY="275.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <SplitPane dividerPositions="0.5" prefHeight="100.0" prefWidth="200.0">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="95.0">
+                                 <children>
+                                    <Button fx:id="p2hbtn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Humain" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="95.0">
+                                 <children>
+                                    <Button fx:id="p2iabtn" mnemonicParsing="false" text="Ordi" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children></HBox>
+            <HBox alignment="CENTER" layoutY="400.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Button fx:id="iaoptbtn" mnemonicParsing="false" text="Options IA" />
+               </children></HBox>
+            <HBox alignment="CENTER" layoutY="500.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Button fx:id="valbtn" mnemonicParsing="false" text="Valider" />
+               </children></HBox>
+         </children></Pane>
+      <Pane fx:id="gamepane" prefHeight="600.0" prefWidth="500.0">
          <children>
-            <ImageView fx:id="ImgBottomLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="20" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgTopRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgTopLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="00" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgTopCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgCenterLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="10" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgCenterRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgCenterCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgBottomCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="ImgBottomRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <image>
-                  <Image url="@blank.png" />
-               </image>
-            </ImageView>
+            <GridPane alignment="CENTER" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blanka.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </GridPane>
+            <GridPane fx:id="grillemorpion" alignment="CENTER" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fx:id="ImgBottomLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="20" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgTopRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgTopLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="00" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgTopCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgCenterLeft" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="10" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgCenterRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgCenterCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgBottomCenter" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ImgBottomRight" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" userData="22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@blank.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label fx:id="result" alignment="CENTER" text="Morpion-kun">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="300.0" layoutY="500.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="resetbtn" mnemonicParsing="false" text="Reset" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="100.0" layoutY="500.0" prefHeight="100.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="optionbtn" mnemonicParsing="false" text="Options" />
+               </children>
+            </HBox>
          </children>
-      </GridPane>
-      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="500.0">
+      </Pane>
+      <Pane fx:id="iapane" disable="true" opacity="0.0" prefHeight="600.0" prefWidth="500.0">
          <children>
-            <Label fx:id="result" alignment="CENTER" text="Morpion-kun">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" layoutX="300.0" layoutY="500.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="100.0">
-         <children>
-            <Button fx:id="resetbtn" mnemonicParsing="false" text="RESET" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" layoutX="100.0" layoutY="500.0" prefHeight="100.0" prefWidth="100.0">
-         <children>
-            <Button fx:id="optionbtn" mnemonicParsing="false" text="OPTIONS" />
-         </children>
-      </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Options IA">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="75.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Type d'IA" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="150.0" prefHeight="50.0" prefWidth="500.0">
+               <children>
+                  <ComboBox fx:id="iatypecombo" prefWidth="150.0" promptText="Sample text" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="200.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label text="Niveau de difficulté" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="275.0" prefHeight="50.0" prefWidth="500.0">
+               <children>
+                  <ComboBox fx:id="iadifcombo" prefWidth="150.0" promptText="Sample text" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="350.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Button fx:id="iatrainbtn" mnemonicParsing="false" text="Entraînement" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="500.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Button fx:id="iavalbtn" mnemonicParsing="false" text="Valider" />
+               </children>
+            </HBox>
+         </children></Pane>
    </children>
 </Pane>

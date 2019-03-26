@@ -1,20 +1,29 @@
 package sample;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 public class Controller {
     Main.data d;
+    @FXML
+    private Pane gamepane;
+    @FXML
+    private Pane optionpane;
+    @FXML
+    private Pane iapane;
     @FXML
     private GridPane grillemorpion;
     @FXML
@@ -38,11 +47,34 @@ public class Controller {
     @FXML
     private Button resetbtn;
     @FXML
+    private Button optionbtn;
+    @FXML
     private Label result;
+    @FXML
+    private Button osymbtn;
+    @FXML
+    private Button xsymbtn;
+    @FXML
+    private Button p2hbtn;
+    @FXML
+    private Button p2iabtn;
+    @FXML
+    private Button iaoptbtn;
+    @FXML
+    private Button valbtn;
+    @FXML
+    private ComboBox iatypecombo;
+    @FXML
+    private ComboBox iadifcombo;
+    @FXML
+    private Button iatrainbtn;
+    @FXML
+    private Button iavalbtn;
 
     private int[] grille = new int[]{ 0,0,0, 0,0,0, 0,0,0 };
     private int joueur = 1;
     private int firstjoueur = 1;
+    private int typejoueur = 1;
     private EventHandler<MouseEvent> eventH;
     private int resultat;
     private FadeTransition ft;
@@ -58,16 +90,119 @@ public class Controller {
     private void initialize()
     {
         resetbtn.setOnAction(new EventHandler<ActionEvent>() {
-        @Override public void handle(ActionEvent e) {
-            reecrire(0,0,0);
-            joueur=firstjoueur;
-            if(joueur==1){
-                result.setText("Tour de Joueur O");
-            } else {
-                result.setText("Tour de Joueur X");
+            @Override
+            public void handle(ActionEvent e) {
+                reecrire(0,0,0);
+                joueur=firstjoueur;
+                if(joueur==1){
+                    result.setText("Tour de Joueur O");
+                } else {
+                    result.setText("Tour de Joueur X");
+                }
             }
-        }
-    });
+        });
+
+        optionbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ft = new FadeTransition(Duration.millis(200), gamepane);
+                ft.setFromValue(1);
+                ft.setToValue(0);
+                ft.play();
+                ft = new FadeTransition(Duration.millis(200), optionpane);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
+                gamepane.setDisable(true);
+                optionpane.setDisable(false);
+            }
+        });
+
+        osymbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                firstjoueur=1;
+            }
+        });
+
+        xsymbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                firstjoueur=2;
+            }
+        });
+
+        p2hbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                typejoueur=1;
+            }
+        });
+
+        p2iabtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                typejoueur=2;
+            }
+        });
+
+        iaoptbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ft = new FadeTransition(Duration.millis(200), optionpane);
+                ft.setFromValue(1);
+                ft.setToValue(0);
+                ft.play();
+                ft = new FadeTransition(Duration.millis(200), iapane);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
+                optionpane.setDisable(true);
+                iapane.setDisable(false);
+            }
+        });
+
+        valbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ft = new FadeTransition(Duration.millis(200), optionpane);
+                ft.setFromValue(1);
+                ft.setToValue(0);
+                ft.play();
+                ft = new FadeTransition(Duration.millis(200), gamepane);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
+                optionpane.setDisable(true);
+                gamepane.setDisable(false);
+
+                reecrire(0,0,0);
+            }
+        });
+
+        iatrainbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // TODO : le training de l'IA
+            }
+        });
+
+        iavalbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ft = new FadeTransition(Duration.millis(200), iapane);
+                ft.setFromValue(1);
+                ft.setToValue(0);
+                ft.play();
+                ft = new FadeTransition(Duration.millis(200), optionpane);
+                ft.setFromValue(0);
+                ft.setToValue(1);
+                ft.play();
+                iapane.setDisable(true);
+                optionpane.setDisable(false);
+            }
+        });
+
         eventH = new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent e) {
                 Node node = (Node) e.getSource() ;
@@ -75,10 +210,14 @@ public class Controller {
                 int x= Character.getNumericValue(data.charAt(0));
                 int y= Character.getNumericValue(data.charAt(1));
                 reecrire(joueur,x,y);
-                if(joueur==1){
-                    joueur++;
+                if(typejoueur==1) {
+                    if (joueur == 1) {
+                        joueur++;
+                    } else {
+                        joueur--;
+                    }
                 } else {
-                    joueur--;
+                    // TODO : code du jeu de l'IA + affichage en fonction de l'output
                 }
                 System.out.println("X="+x+" Y="+y+" Joueur="+joueur);
 
@@ -348,10 +487,6 @@ public class Controller {
             }
         }
     }
-
-    // 0 1 2
-    // 3 4 5
-    // 6 7 8
 
 
     private int vresult(){
