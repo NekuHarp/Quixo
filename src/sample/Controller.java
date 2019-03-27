@@ -177,6 +177,12 @@ public class Controller {
                 gamepane.setDisable(false);
 
                 reecrire(0,0,0);
+                joueur=firstjoueur;
+                if(joueur==1){
+                    result.setText("Tour de Joueur O");
+                } else {
+                    result.setText("Tour de Joueur X");
+                }
             }
         });
 
