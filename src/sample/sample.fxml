@@ -254,7 +254,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutY="150.0" prefHeight="50.0" prefWidth="500.0">
                <children>
-                  <ComboBox fx:id="iatypecombo" prefWidth="150.0" promptText="Sample text" />
+                  <ComboBox fx:id="iatypecombo" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutY="200.0" prefHeight="100.0" prefWidth="500.0">
@@ -264,12 +264,17 @@
             </HBox>
             <HBox alignment="CENTER" layoutY="275.0" prefHeight="50.0" prefWidth="500.0">
                <children>
-                  <ComboBox fx:id="iadifcombo" prefWidth="150.0" promptText="Sample text" />
+                  <ComboBox fx:id="iadifcombo" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutY="350.0" prefHeight="100.0" prefWidth="500.0">
                <children>
                   <Button fx:id="iatrainbtn" mnemonicParsing="false" text="Entraînement" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="425.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Label fx:id="notif" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutY="500.0" prefHeight="100.0" prefWidth="500.0">

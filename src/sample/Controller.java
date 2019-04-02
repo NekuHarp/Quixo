@@ -2,6 +2,8 @@ package sample;
 
 import com.sun.xml.internal.bind.v2.TODO;
 import javafx.animation.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+
+import java.io.File;
 
 public class Controller {
     Main.data d;
@@ -70,6 +74,8 @@ public class Controller {
     private Button iatrainbtn;
     @FXML
     private Button iavalbtn;
+    @FXML
+    private Label notif;
 
     private int[] grille = new int[]{ 0,0,0, 0,0,0, 0,0,0 };
     private int joueur = 1;
@@ -78,6 +84,9 @@ public class Controller {
     private EventHandler<MouseEvent> eventH;
     private int resultat;
     private FadeTransition ft;
+    private String iatype;
+    private String iadif;
+    private File fichierIA;
 
     public Controller()
     {
@@ -186,29 +195,6 @@ public class Controller {
             }
         });
 
-        iatrainbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                // TODO : le training de l'IA
-            }
-        });
-
-        iavalbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                ft = new FadeTransition(Duration.millis(200), iapane);
-                ft.setFromValue(1);
-                ft.setToValue(0);
-                ft.play();
-                ft = new FadeTransition(Duration.millis(200), optionpane);
-                ft.setFromValue(0);
-                ft.setToValue(1);
-                ft.play();
-                iapane.setDisable(true);
-                optionpane.setDisable(false);
-            }
-        });
-
         eventH = new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent e) {
                 Node node = (Node) e.getSource() ;
@@ -222,38 +208,110 @@ public class Controller {
                     } else {
                         joueur--;
                     }
+                    resultat = vresult();
+                    ecrireresult();
                 } else {
-                    // TODO : code du jeu de l'IA + affichage en fonction de l'output
-                }
-                System.out.println("X="+x+" Y="+y+" Joueur="+joueur);
+                    resultat = vresult();
+                    joueur++;
+                    ecrireresult();
+                    if(resultat==0){
+                        gamepane.setDisable(true);
 
-                resultat = vresult();
+                        // TODO : code du jeu de l'IA + affichage en fonction de l'output
 
-                if(resultat!=0){
-                    if(resultat==1){
-                        deletehandler();
-                        result.setText("Joueur O gagne !");
-                    } else if(resultat==2){
-                        deletehandler();
-                        result.setText("Joueur X gagne !");
-                    } else {
-                        deletehandler();
-                        result.setText("Match nul !");
-                    }
-                } else {
-                    if(joueur==1){
-                        result.setText("Tour de Joueur O");
-                    } else {
-                        result.setText("Tour de Joueur X");
+                        gamepane.setDisable(false);
+                        joueur--;
                     }
                 }
+                //System.out.println("X="+x+" Y="+y+" Joueur="+joueur);
             }
         };
 
         reecrire(0,0,0);
 
+        iatypecombo.getItems().addAll("Vétéran","Bleu");
+        iadifcombo.getItems().addAll("Facile","Moyen","Difficile");
+
+        iatypecombo.valueProperty().addListener(new ChangeListener<String>() {
+            @Override public void changed(ObservableValue ov, String t, String t1) {
+                iatype = t1;
+            }
+        });
+
+        iadifcombo.valueProperty().addListener(new ChangeListener<String>() {
+            @Override public void changed(ObservableValue ov, String t, String t1) {
+                iadif = t1;
+            }
+        });
+
+        iatrainbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if ((iatypecombo.getValue() != null && !iatypecombo.getValue().toString().isEmpty())&&(iadifcombo.getValue() != null && !iadifcombo.getValue().toString().isEmpty())){
+                    if(iatypecombo.getValue().toString().equals("Vétéran")){
+                        notif.setText("IA incompatible pour entraînement");
+                    } else {
+                        if(iadifcombo.getValue().toString().equals("Facile")){
+                            fichierIA = new File("src/sample/IA/Bleu_Facile");
+                        } else if(iadifcombo.getValue().toString().equals("Moyen")){
+                            fichierIA = new File("src/sample/IA/Bleu_Moyen");
+                        } else {
+                            fichierIA = new File("src/sample/IA/Bleu_Difficile");
+                        }
+                    }
+
+                    // TODO : le training de l'IA
+
+                } else {
+                    notif.setText("Choisissez une IA à entraîner");
+                }
+            }
+        });
 
 
+        iavalbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if ((iatypecombo.getValue() != null && !iatypecombo.getValue().toString().isEmpty())&&(iadifcombo.getValue() != null && !iadifcombo.getValue().toString().isEmpty())){
+                    if(iatypecombo.getValue().toString().equals("Vétéran")){
+                        if(iadifcombo.getValue().toString().equals("Facile")){
+                            fichierIA = new File("src/sample/IA/Veteran_Facile");
+                        } else if(iadifcombo.getValue().toString().equals("Moyen")){
+                            fichierIA = new File("src/sample/IA/Veteran_Moyen");
+                        } else {
+                            fichierIA = new File("src/sample/IA/Veteran_Difficile");
+                        }
+                    } else {
+                        if(iadifcombo.getValue().toString().equals("Facile")){
+                            fichierIA = new File("src/sample/IA/Bleu_Facile");
+                        } else if(iadifcombo.getValue().toString().equals("Moyen")){
+                            fichierIA = new File("src/sample/IA/Bleu_Moyen");
+                        } else {
+                            fichierIA = new File("src/sample/IA/Bleu_Difficile");
+                        }
+                    }
+
+                    if(fichierIA.isFile()){
+
+                        ft = new FadeTransition(Duration.millis(200), iapane);
+                        ft.setFromValue(1);
+                        ft.setToValue(0);
+                        ft.play();
+                        ft = new FadeTransition(Duration.millis(200), optionpane);
+                        ft.setFromValue(0);
+                        ft.setToValue(1);
+                        ft.play();
+                        iapane.setDisable(true);
+                        optionpane.setDisable(false);
+
+                    } else {
+                        notif.setText("Veuillez entraîner l'IA");
+                    }
+                } else {
+                    notif.setText("Choisissez une IA / Difficulté");
+                }
+            }
+        });
 
     }
 
@@ -494,6 +552,27 @@ public class Controller {
         }
     }
 
+    private void ecrireresult(){
+
+        if(resultat!=0){
+            if(resultat==1){
+                deletehandler();
+                result.setText("Joueur O gagne !");
+            } else if(resultat==2){
+                deletehandler();
+                result.setText("Joueur X gagne !");
+            } else {
+                deletehandler();
+                result.setText("Match nul !");
+            }
+        } else {
+            if(joueur==1){
+                result.setText("Tour de Joueur O");
+            } else {
+                result.setText("Tour de Joueur X");
+            }
+        }
+    }
 
     private int vresult(){
         boolean full = true;
