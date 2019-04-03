@@ -1,6 +1,5 @@
 package sample;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import javafx.animation.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import sample.AI.IA;
 
 import java.io.File;
 
@@ -76,8 +77,10 @@ public class Controller {
     private Button iavalbtn;
     @FXML
     private Label notif;
+    @FXML
+    private ProgressBar progtrain;
 
-    private int[] grille = new int[]{ 0,0,0, 0,0,0, 0,0,0 };
+    private double[] grille = new double[]{ 0,0,0, 0,0,0, 0,0,0 };
     private int joueur = 1;
     private int firstjoueur = 1;
     private int typejoueur = 1;
@@ -87,6 +90,7 @@ public class Controller {
     private String iatype;
     private String iadif;
     private File fichierIA;
+    private IA intelligence = new IA(1,0);
 
     public Controller()
     {
@@ -174,6 +178,7 @@ public class Controller {
         valbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+
                 ft = new FadeTransition(Duration.millis(200), optionpane);
                 ft.setFromValue(1);
                 ft.setToValue(0);
@@ -216,9 +221,12 @@ public class Controller {
                     ecrireresult();
                     if(resultat==0){
                         gamepane.setDisable(true);
-
-                        // TODO : code du jeu de l'IA + affichage en fonction de l'output
-
+                        System.out.println(intelligence.type);
+                        System.out.println(intelligence.diff);
+                        int[] coupia = intelligence.doTurn(grille);
+                        afficheboard();
+                        reecrire(joueur,coupia[0],coupia[1]);
+                        afficheboard();
                         gamepane.setDisable(false);
                         joueur--;
                     }
@@ -235,12 +243,14 @@ public class Controller {
         iatypecombo.valueProperty().addListener(new ChangeListener<String>() {
             @Override public void changed(ObservableValue ov, String t, String t1) {
                 iatype = t1;
+                notif.setText("");
             }
         });
 
         iadifcombo.valueProperty().addListener(new ChangeListener<String>() {
             @Override public void changed(ObservableValue ov, String t, String t1) {
                 iadif = t1;
+                notif.setText("");
             }
         });
 
@@ -252,22 +262,27 @@ public class Controller {
                         notif.setText("IA incompatible pour entraînement");
                     } else {
                         if(iadifcombo.getValue().toString().equals("Facile")){
-                            fichierIA = new File("src/sample/IA/Bleu_Facile");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Facile");
+                            intelligence = new IA(2,0);
                         } else if(iadifcombo.getValue().toString().equals("Moyen")){
-                            fichierIA = new File("src/sample/IA/Bleu_Moyen");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Moyen");
+                            intelligence = new IA(2,1);
                         } else {
-                            fichierIA = new File("src/sample/IA/Bleu_Difficile");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Difficile");
+                            intelligence = new IA(2,2);
                         }
+                        progressbarupdate(0);
+
+                        intelligence.doTraining();
+
+                        progressbarupdate(1);
+
                     }
-
-                    // TODO : le training de l'IA
-
                 } else {
                     notif.setText("Choisissez une IA à entraîner");
                 }
             }
         });
-
 
         iavalbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -275,19 +290,25 @@ public class Controller {
                 if ((iatypecombo.getValue() != null && !iatypecombo.getValue().toString().isEmpty())&&(iadifcombo.getValue() != null && !iadifcombo.getValue().toString().isEmpty())){
                     if(iatypecombo.getValue().toString().equals("Vétéran")){
                         if(iadifcombo.getValue().toString().equals("Facile")){
-                            fichierIA = new File("src/sample/IA/Veteran_Facile");
+                            fichierIA = new File("src/sample/AI/IA/Veteran_Facile");
+                            intelligence = new IA(1,0);
                         } else if(iadifcombo.getValue().toString().equals("Moyen")){
-                            fichierIA = new File("src/sample/IA/Veteran_Moyen");
+                            fichierIA = new File("src/sample/AI/IA/Veteran_Moyen");
+                            intelligence = new IA(1,1);
                         } else {
-                            fichierIA = new File("src/sample/IA/Veteran_Difficile");
+                            fichierIA = new File("src/sample/AI/IA/Veteran_Difficile");
+                            intelligence = new IA(1,2);
                         }
                     } else {
                         if(iadifcombo.getValue().toString().equals("Facile")){
-                            fichierIA = new File("src/sample/IA/Bleu_Facile");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Facile");
+                            intelligence = new IA(2,0);
                         } else if(iadifcombo.getValue().toString().equals("Moyen")){
-                            fichierIA = new File("src/sample/IA/Bleu_Moyen");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Moyen");
+                            intelligence = new IA(2,1);
                         } else {
-                            fichierIA = new File("src/sample/IA/Bleu_Difficile");
+                            fichierIA = new File("src/sample/AI/IA/Bleu_Difficile");
+                            intelligence = new IA(2,2);
                         }
                     }
 
@@ -304,6 +325,8 @@ public class Controller {
                         iapane.setDisable(true);
                         optionpane.setDisable(false);
 
+
+
                     } else {
                         notif.setText("Veuillez entraîner l'IA");
                     }
@@ -319,7 +342,7 @@ public class Controller {
         if(j == 1){
             if(x==0){
                 if(y==0){
-                    ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgTopLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[0]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgTopLeft);
@@ -327,7 +350,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgTopCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[1]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgTopCenter);
@@ -335,7 +358,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgTopRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[2]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgTopRight);
@@ -345,7 +368,7 @@ public class Controller {
                 }
             } else if(x==1){
                 if(y==0){
-                    ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgCenterLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[3]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterLeft);
@@ -353,7 +376,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgCenterCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[4]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterCenter);
@@ -361,7 +384,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgCenterRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[5]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterRight);
@@ -371,7 +394,7 @@ public class Controller {
                 }
             } else {
                 if(y==0){
-                    ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgBottomLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[6]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomLeft);
@@ -379,7 +402,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgBottomCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[7]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomCenter);
@@ -387,7 +410,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O.png")));
+                    ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
                     ImgBottomRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[8]=1;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomRight);
@@ -400,7 +423,7 @@ public class Controller {
         } else if(j == 2) {
             if(x==0){
                 if(y==0){
-                    ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgTopLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[0]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgTopLeft);
@@ -408,7 +431,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgTopCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[1]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgTopCenter);
@@ -416,7 +439,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgTopRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[2]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgTopRight);
@@ -426,7 +449,7 @@ public class Controller {
                 }
             } else if(x==1){
                 if(y==0){
-                    ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgCenterLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[3]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterLeft);
@@ -434,7 +457,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgCenterCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[4]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterCenter);
@@ -442,7 +465,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgCenterRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[5]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgCenterRight);
@@ -452,7 +475,7 @@ public class Controller {
                 }
             } else {
                 if(y==0){
-                    ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgBottomLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[6]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomLeft);
@@ -460,7 +483,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else if(y==1){
-                    ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgBottomCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[7]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomCenter);
@@ -468,7 +491,7 @@ public class Controller {
                     ft.setToValue(1);
                     ft.play();
                 } else {
-                    ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X.png")));
+                    ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
                     ImgBottomRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
                     grille[8]=2;
                     ft = new FadeTransition(Duration.millis(200), ImgBottomRight);
@@ -516,17 +539,17 @@ public class Controller {
             ft.setToValue(0);
             ft.play();
 
-            ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
+            ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
 
-            ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
+            ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
 
-            ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
-            ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/blank.png")));
+            ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+            ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
 
             ImgTopLeft.addEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
             ImgTopCenter.addEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
@@ -591,44 +614,44 @@ public class Controller {
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==1)){
 
             if((grille[0]==grille[1])&&(grille[1]==grille[2])&&(grille[0]==1)){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[0]==grille[3])&&(grille[3]==grille[6])&&(grille[0]==1)){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[0]==grille[4])&&(grille[4]==grille[8])&&(grille[0]==1)){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[6]==grille[7])&&(grille[7]==grille[8])&&(grille[6]==1)){
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[2]==grille[5])&&(grille[5]==grille[8])&&(grille[2]==1)){
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[2]==grille[4])&&(grille[4]==grille[6])&&(grille[2]==1)){
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[3]==grille[4])&&(grille[4]==grille[5])&&(grille[3]==1)){
-                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             if((grille[1]==grille[4])&&(grille[4]==grille[7])&&(grille[1]==1)){
-                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
-                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/O_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
             return 1;
         }
@@ -642,44 +665,44 @@ public class Controller {
                 ((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==2)){
 
             if((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==2){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[0]==grille[3])&&(grille[3]==grille[6])&&grille[0]==2){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[0]==grille[4])&&(grille[4]==grille[8])&&grille[0]==2){
-                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[6]==grille[7])&&(grille[7]==grille[8])&&grille[6]==2){
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[2]==grille[5])&&(grille[5]==grille[8])&&grille[2]==2){
-                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgBottomRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[2]==grille[4])&&(grille[4]==grille[6])&&grille[2]==2){
-                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[3]==grille[4])&&(grille[4]==grille[5])&&grille[3]==2){
-                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgCenterRight.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterLeft.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             if((grille[1]==grille[4])&&(grille[4]==grille[7])&&grille[1]==2){
-                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
-                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/X_win.png")));
+                ImgTopCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
             return 2;
         }
@@ -701,6 +724,22 @@ public class Controller {
         ImgBottomLeft.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
         ImgBottomCenter.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
         ImgBottomRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
+    }
+
+    private void progressbarupdate(double progpercent){
+        progtrain.setProgress(progpercent);
+        if(progpercent==1){
+            notif.setText("Entraînement terminé");
+        }
+    }
+
+    private void afficheboard(){
+        for (int i = 0; i < grille.length; i++){
+            System.out.print(grille[i]+" ");
+            if((i==2)||(i==5)){
+                System.out.println(" ");
+            }
+        }
     }
 
 }
