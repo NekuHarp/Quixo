@@ -248,24 +248,29 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="75.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="50.0" prefHeight="100.0" prefWidth="500.0">
                <children>
                   <Label text="Type d'IA" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="150.0" prefHeight="50.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="125.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <ComboBox fx:id="iatypecombo" prefWidth="150.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="200.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="150.0" prefHeight="100.0" prefWidth="500.0">
                <children>
                   <Label text="Niveau de difficulté" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="275.0" prefHeight="50.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="225.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <ComboBox fx:id="iadifcombo" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutY="275.0" prefHeight="100.0" prefWidth="500.0">
+               <children>
+                  <Button fx:id="resettrainbtn" mnemonicParsing="false" text="Réinitialiser données d'entraînement" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutY="350.0" prefHeight="100.0" prefWidth="500.0">

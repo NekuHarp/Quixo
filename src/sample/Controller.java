@@ -3,6 +3,7 @@ package sample;
 import javafx.animation.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -79,6 +80,8 @@ public class Controller {
     private Label notif;
     @FXML
     private ProgressBar progtrain;
+    @FXML
+    private Button resettrainbtn;
 
     private double[] grille = new double[]{ 0,0,0, 0,0,0, 0,0,0 };
     private int joueur = 1;
@@ -90,7 +93,8 @@ public class Controller {
     private String iatype;
     private String iadif;
     private File fichierIA;
-    private IA intelligence = new IA(1,0);
+    private IA intelligence = new IA(2,0);
+    public Controller control = this;
 
     public Controller()
     {
@@ -216,19 +220,20 @@ public class Controller {
                     resultat = vresult();
                     ecrireresult();
                 } else {
+                    intelligence.addEnnemyTurn(grille,x,y);
                     resultat = vresult();
                     joueur++;
                     ecrireresult();
                     if(resultat==0){
                         gamepane.setDisable(true);
-                        System.out.println(intelligence.type);
-                        System.out.println(intelligence.diff);
                         int[] coupia = intelligence.doTurn(grille);
-                        afficheboard();
+                        //afficheboard();
                         reecrire(joueur,coupia[0],coupia[1]);
-                        afficheboard();
+                        //afficheboard();
                         gamepane.setDisable(false);
                         joueur--;
+                        resultat = vresult();
+                        ecrireresult();
                     }
                 }
                 //System.out.println("X="+x+" Y="+y+" Joueur="+joueur);
@@ -271,16 +276,40 @@ public class Controller {
                             fichierIA = new File("src/sample/AI/IA/Bleu_Difficile");
                             intelligence = new IA(2,2);
                         }
+                        iavalbtn.setDisable(true);
+                        iatrainbtn.setDisable(true);
+                        iatypecombo.setDisable(true);
+                        iadifcombo.setDisable(true);
                         progressbarupdate(0);
 
-                        intelligence.doTraining();
+                        Task task = new Task<Void>() {
+                            @Override public Void call() {
+                                intelligence.doTraining(control);
+                                iavalbtn.setDisable(false);
+                                iatrainbtn.setDisable(false);
+                                iatypecombo.setDisable(false);
+                                iadifcombo.setDisable(false);
+                                progtrain.setProgress(1);
+                                //control.notif.setText("Entraînement terminé");
+                                return null;
+                            }
+                        };
+                        new Thread(task).start();
 
-                        progressbarupdate(1);
+
+
 
                     }
                 } else {
                     notif.setText("Choisissez une IA à entraîner");
                 }
+            }
+        });
+
+        resettrainbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                intelligence.reset();
             }
         });
 
@@ -653,6 +682,10 @@ public class Controller {
                 ImgCenterCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
                 ImgBottomCenter.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
+
+            if(typejoueur==2){
+                intelligence.enemyWin();
+            }
             return 1;
         }
         if(     ((grille[0]==grille[1])&&(grille[1]==grille[2])&&grille[0]==2)||
@@ -726,10 +759,13 @@ public class Controller {
         ImgBottomRight.removeEventHandler(MouseEvent.MOUSE_CLICKED,eventH);
     }
 
-    private void progressbarupdate(double progpercent){
+    public void progressbarupdate(double progpercent){
         progtrain.setProgress(progpercent);
         if(progpercent==1){
             notif.setText("Entraînement terminé");
+        }
+        if(progpercent==0){
+            notif.setText(" ");
         }
     }
 

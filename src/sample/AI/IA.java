@@ -1,4 +1,8 @@
 package sample.AI;
+
+import javafx.scene.control.ProgressBar;
+import sample.Controller;
+
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.util.HashMap;
@@ -18,15 +22,14 @@ import java.nio.file.Paths;
 
 public class IA
 {
-	public int type=0;				//	0 -> Entrainement	;	1 -> Vétéran
-	public int diff=0;				//  0 -> Facile   ;   1 -> Moyen   ;  2 -> Difficile
+	int type=0;				//	0 -> Entrainement	;	1 -> Vétéran
+	int diff=0;				//  0 -> Facile   ;   1 -> Moyen   ;  2 -> Difficile
 	MultiLayerPerceptron net;
-	public String fileName="src/sample/AI/IA/Train.txt";						//Modifier le path du fichier suivant le vrai path
+	String fileName="src/sample/AI/IA/train.txt";						//Modifier le path du fichier suivant le vrai path
 	Vector<String[]> temporary=new Vector<String[]>();
 	
 	public IA(int type,int diff)
 	{
-		this.type=type;
 		this.diff=diff;
 		if(type==1)
 		{
@@ -35,7 +38,7 @@ public class IA
 			else if(diff==1)
 				net=MultiLayerPerceptron.load("src/sample/AI/IA/Veteran_Moyen");
 			else if(diff==2)
-				net=MultiLayerPerceptron.load("src/sample/AI/IA/Veteran_Difficile");
+				net=net=MultiLayerPerceptron.load("src/sample/AI/IA/Veteran_Difficile");
 		}
 		else if(type==2)
 		{
@@ -46,60 +49,69 @@ public class IA
 			else if(diff==2)
 				net=net=MultiLayerPerceptron.load("src/sample/AI/IA/Bleu_Difficile");
 		}
-		else{
+		else
 			net=null;
-		}
-
-		if(net==null){
-			System.out.println("NULLOS");
-		}
 	}
-	public int[] doTurn(int[][] board) {
+	/*public int[] doTurn(int[][] board)					//A utiliser pour recevoir un int[2] du coup joué par l'IA : int[0] = x ; int[1] = y; board : le plateau actuel
+	{
 		if(net!=null)
 		{
 			double[] output;
 			output = net.forwardPropagation(intTableToDoubleTable(board));
-			return getTurn(output);
+			return getTurn(output,board);
 		}
 		else
 			System.out.println("IA non initialisé");
 		return null;
-
-	}
-
+		
+	}*/
 	public int[] doTurn(double[] board)					//A utiliser pour recevoir un int[2] du coup joué par l'IA : int[0] = x ; int[1] = y; board : le plateau actuel
 	{
 		if(net!=null)
 		{
 			double[] output;
 			output = net.forwardPropagation(board);
-			return getTurn(output);
+			return getTurn(output,board);
 		}
 		else
 			System.out.println("IA non initialisé");
 		return null;
-
+		
 	}
-
-	public int[] getTurn(double[] input)
+	public double[] copyPasteDoubleTable(double[] input)
+	{
+		double[] news=new double[9];
+		for(int i=0;i<news.length;i++)
+		{
+			news[i]=input[i];
+		}
+		return news;
+	}
+	public int[] getTurn(double[] input,double[] board)
 	{
 		double max=0;
 		int x=0;
 		int y=0;
 		int j=0;
+		
+			for(int u=0;u<input.length;u++)
+			{
+				System.out.print(input[u]+",");
+			}
+			System.out.println("");
 		for(int i=0;i<9;i++)
 		{
-			if(max<input[i])
+			if((max<input[i])&&(board[i]==0))
 			{
 				max=input[i];
-				x=i%3;
+				y=i%3;
 				j=i;
 				if((i>=0)&&(i<=2))
-					y=0;
+					x=0;
 				else if((i>=3)&&(i<=5))
-					y=1;
+					x=1;
 				else if((i>=6)&&(i<=8))
-					y=2;
+					x=2;
 			}
 		}
 		int[] c=new int[2];
@@ -107,16 +119,16 @@ public class IA
 		c[1]=y;
 		return c;
 	}
-	public boolean doTraining()						// A utiliser dans le bouton entrainement /// Faire barre de chargement
+	public boolean doTraining(Controller control)						// A utiliser dans le bouton entrainement /// Faire barre de chargement
 	{
 		
 		int[] layers=null;
 		if(diff==0)
-			layers=new int[]{ 9, 2 , 9 };
+			layers=new int[]{ 9, 50 , 9 };
 		else if(diff==1)
-			layers=new int[]{ 9, 25 , 9 };
+			layers=new int[]{ 9, 250 , 9 };
 		else
-			layers=new int[]{ 9, 400 , 9 };
+			layers=new int[]{ 9, 800 , 9 };
 		if(net==null)
 		{
 			if(diff==0)
@@ -158,7 +170,6 @@ public class IA
 				coup=getGoodOutput(coup);
 				add(vect,stringToDoubleTable(board));
 				C.put(board,stringToDoubleTable(getGoodOutput(coup)));
-				break;
 			}
 		}
 		catch(FileNotFoundException ex)
@@ -170,7 +181,7 @@ public class IA
             System.out.println("Erreur lors de la lecture de '"  + fileName + "'");
         }
 		////////////////////////////////////
-		for(int i=0;i<vect.size();i++)
+		/*for(int i=0;i<vect.size();i++)
 		{
 			double[] inputs222 = vect.get(i);
 			for(int u=0;u<inputs222.length;u++)
@@ -187,6 +198,7 @@ public class IA
 			System.out.println("");
 			System.out.println("");
 		}
+		System.out.println("fin affich vect\n\n");*/
 		for(int o=0;o<2500;o++)
 			{
 				for(int i=0;i<vect.size();i++)
@@ -203,9 +215,13 @@ public class IA
 					//TO DO : 
 					//			((i+(o*vect.size()))/ (vect.size()*2500.0)) == pourcentage 
 					//Rajoute un argument à la fonction (barre de chargement) si besoin
-					System.out.println("ICI !"+((i+(o*vect.size()))/ (vect.size()*2500.0)));
+					if((((i+(o*vect.size()))/ (vect.size()*2500.0))==0.2)||(((i+(o*vect.size()))/ (vect.size()*2500.0))==0.4)||(((i+(o*vect.size()))/ (vect.size()*2500.0))==0.6)||(((i+(o*vect.size()))/ (vect.size()*2500.0))==0.8)){
+						control.progressbarupdate(((i+(o*vect.size()))/ (vect.size()*2500.0)));
+						System.out.println(((i+(o*vect.size()))/ (vect.size()*2500.0)));
+					}
 					////////////////////////
 					////////////////////////
+					//try { Thread.sleep(10); } catch (Exception e) { }
 				}
 			}
 			error /= vect.size()*2500 ;
@@ -317,6 +333,7 @@ public class IA
 			{
 				String line="";
 				String[] geti=temporary.get(i);
+				//System.out.println("temporary : "+geti[0]+" "+geti[1]);
 				bufferedReader = new BufferedReader(new FileReader(fileName));
 				boolean test=false;
 				int nbLine=0;
@@ -357,7 +374,7 @@ public class IA
 
 							for (int y = 0; y < fileContent.size(); y++) {
 								if (y==nbLine) {
-									fileContent.set(i,board+'\t'+incrementString(geti[1],coup));
+									fileContent.set(y,board+'\t'+incrementString(geti[1],coup)); // set(i,[...] potenciellement ?
 									break;
 								}
 							}
@@ -450,5 +467,16 @@ public class IA
 				output+='1';
 		}
 		return output;
+	}
+
+	public void reset()
+	{
+		try{
+			BufferedWriter out = new BufferedWriter(new FileWriter(fileName, false));
+			out.write("");
+			out.close();
+		}
+		catch(Exception e)
+		{}
 	}
 }
