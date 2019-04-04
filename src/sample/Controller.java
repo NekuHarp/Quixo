@@ -19,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import sample.AI.IA;
+import sample.AI.Test;
 
 import java.io.File;
 
@@ -265,6 +266,9 @@ public class Controller {
                 if ((iatypecombo.getValue() != null && !iatypecombo.getValue().toString().isEmpty())&&(iadifcombo.getValue() != null && !iadifcombo.getValue().toString().isEmpty())){
                     if(iatypecombo.getValue().toString().equals("Vétéran")){
                         notif.setText("IA incompatible pour entraînement");
+                        /*Test t = new Test();
+                        t.main(new String[0]);*/
+                        // Pour régénérer Vétéran
                     } else {
                         if(iadifcombo.getValue().toString().equals("Facile")){
                             fichierIA = new File("src/sample/AI/IA/Bleu_Facile");
@@ -280,6 +284,7 @@ public class Controller {
                         iatrainbtn.setDisable(true);
                         iatypecombo.setDisable(true);
                         iadifcombo.setDisable(true);
+                        resettrainbtn.setDisable(true);
                         progressbarupdate(0);
 
                         Task task = new Task<Void>() {
@@ -289,6 +294,7 @@ public class Controller {
                                 iatrainbtn.setDisable(false);
                                 iatypecombo.setDisable(false);
                                 iadifcombo.setDisable(false);
+                                resettrainbtn.setDisable(false);
                                 progtrain.setProgress(1);
                                 //control.notif.setText("Entraînement terminé");
                                 return null;
