@@ -34,7 +34,7 @@
                </children></HBox>
             <HBox alignment="CENTER" layoutX="200.0" layoutY="150.0" prefHeight="50.0" prefWidth="100.0">
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="50.0" prefWidth="100.0">
+                  <SplitPane fx:id="splitPane1" dividerPositions="0.5" prefHeight="50.0" prefWidth="100.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
@@ -64,9 +64,9 @@
                </children></HBox>
             <HBox alignment="CENTER" layoutY="275.0" prefHeight="100.0" prefWidth="500.0">
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="100.0" prefWidth="200.0">
+                  <SplitPane fx:id="splitPane2" dividerPositions="0.5" prefHeight="100.0" prefWidth="200.0">
                      <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="95.0">
                                  <children>
@@ -75,7 +75,7 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="95.0">
                                  <children>
@@ -248,7 +248,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="50.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="75.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <Label text="Type d'IA" />
                </children>
@@ -258,7 +258,7 @@
                   <ComboBox fx:id="iatypecombo" prefWidth="150.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="150.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="190.0" prefHeight="25.0" prefWidth="500.0">
                <children>
                   <Label text="Niveau de difficulté" />
                </children>
@@ -273,7 +273,7 @@
                   <Button fx:id="resettrainbtn" mnemonicParsing="false" text="Réinitialiser données d'entraînement" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="350.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="375.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <Button fx:id="iatrainbtn" mnemonicParsing="false" text="Entraînement" />
                </children>
@@ -283,12 +283,12 @@
                   <ProgressBar fx:id="progtrain" prefWidth="200.0" progress="1.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="450.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="475.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <Label fx:id="notif" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutY="500.0" prefHeight="100.0" prefWidth="500.0">
+            <HBox alignment="CENTER" layoutY="525.0" prefHeight="50.0" prefWidth="500.0">
                <children>
                   <Button fx:id="iavalbtn" mnemonicParsing="false" text="Valider" />
                </children>

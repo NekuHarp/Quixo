@@ -7,10 +7,7 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
@@ -83,6 +80,10 @@ public class Controller {
     private ProgressBar progtrain;
     @FXML
     private Button resettrainbtn;
+    @FXML
+    private SplitPane splitPane1;
+    @FXML
+    private SplitPane splitPane2;
 
     private double[] grille = new double[]{ 0,0,0, 0,0,0, 0,0,0 };
     private int joueur = 1;
@@ -94,8 +95,10 @@ public class Controller {
     private String iatype;
     private String iadif;
     private File fichierIA;
-    private IA intelligence = new IA(2,0);
+    private IA intelligence = new IA(1,0);
     public Controller control = this;
+    private boolean premiercoupIA = false;
+
 
     public Controller()
     {
@@ -107,6 +110,26 @@ public class Controller {
     @FXML
     private void initialize()
     {
+
+        SplitPane.Divider div1 = splitPane1.getDividers().get(0);
+        SplitPane.Divider div2 = splitPane2.getDividers().get(0);
+
+        div1.positionProperty().addListener(new ChangeListener<Number>(){
+            @Override
+            public void changed( ObservableValue<? extends Number> observable, Number oldvalue, Number newvalue )
+            {
+                div1.setPosition(0.5);
+            }
+        });
+
+        div2.positionProperty().addListener(new ChangeListener<Number>(){
+            @Override
+            public void changed( ObservableValue<? extends Number> observable, Number oldvalue, Number newvalue )
+            {
+                div2.setPosition(0.5);
+            }
+        });
+
         resetbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -133,6 +156,16 @@ public class Controller {
                 ft.play();
                 gamepane.setDisable(true);
                 optionpane.setDisable(false);
+                if(typejoueur==1){
+                    p2hbtn.setDisable(true);
+                } else {
+                    p2iabtn.setDisable(true);
+                }
+                if(firstjoueur==1){
+                    osymbtn.setDisable(true);
+                } else {
+                    xsymbtn.setDisable(true);
+                }
             }
         });
 
@@ -140,6 +173,8 @@ public class Controller {
             @Override
             public void handle(ActionEvent e) {
                 firstjoueur=1;
+                xsymbtn.setDisable(false);
+                osymbtn.setDisable(true);
             }
         });
 
@@ -147,6 +182,8 @@ public class Controller {
             @Override
             public void handle(ActionEvent e) {
                 firstjoueur=2;
+                xsymbtn.setDisable(true);
+                osymbtn.setDisable(false);
             }
         });
 
@@ -154,6 +191,8 @@ public class Controller {
             @Override
             public void handle(ActionEvent e) {
                 typejoueur=1;
+                p2hbtn.setDisable(true);
+                p2iabtn.setDisable(false);
             }
         });
 
@@ -161,6 +200,8 @@ public class Controller {
             @Override
             public void handle(ActionEvent e) {
                 typejoueur=2;
+                p2hbtn.setDisable(false);
+                p2iabtn.setDisable(true);
             }
         });
 
@@ -223,7 +264,11 @@ public class Controller {
                 } else {
                     intelligence.addEnnemyTurn(grille,x,y);
                     resultat = vresult();
-                    joueur++;
+                    if (joueur == 1) {
+                        joueur++;
+                    } else {
+                        joueur--;
+                    }
                     ecrireresult();
                     if(resultat==0){
                         gamepane.setDisable(true);
@@ -232,7 +277,11 @@ public class Controller {
                         reecrire(joueur,coupia[0],coupia[1]);
                         //afficheboard();
                         gamepane.setDisable(false);
-                        joueur--;
+                        if (joueur == 1) {
+                            joueur++;
+                        } else {
+                            joueur--;
+                        }
                         resultat = vresult();
                         ecrireresult();
                     }
@@ -359,7 +408,16 @@ public class Controller {
                         ft.play();
                         iapane.setDisable(true);
                         optionpane.setDisable(false);
-
+                        if(typejoueur==1){
+                            p2hbtn.setDisable(true);
+                        } else {
+                            p2iabtn.setDisable(true);
+                        }
+                        if(firstjoueur==1){
+                            osymbtn.setDisable(true);
+                        } else {
+                            xsymbtn.setDisable(true);
+                        }
 
 
                     } else {
@@ -606,6 +664,30 @@ public class Controller {
 
             for (int i = 0; i < grille.length; i++){
                 grille[i]=0;
+            }
+
+            premiercoupIA=false;
+
+            joueur=firstjoueur;
+
+            if((typejoueur==2)&&(firstjoueur==2)&&(premiercoupIA==false)){
+                if (joueur == 1) {
+                    joueur++;
+                } else {
+                    joueur--;
+                }
+                gamepane.setDisable(true);
+                int[] coupia = intelligence.doTurn(grille);
+                reecrire(joueur,coupia[0],coupia[1]);
+                gamepane.setDisable(false);
+                if (joueur == 1) {
+                    joueur++;
+                } else {
+                    joueur--;
+                }
+                resultat = vresult();
+                ecrireresult();
+                premiercoupIA = true;
             }
         }
     }
