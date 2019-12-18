@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Morpion-kun.iml" filepath="$PROJECT_DIR$/Morpion-kun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quixo.iml" filepath="$PROJECT_DIR$/quixo.iml" />
     </modules>
   </component>
 </project>
