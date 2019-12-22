@@ -84,22 +84,44 @@ public class Partie {
         return listresult;
     }
 
-    public boolean verifCoup(Coup move, Joueur player){
+    public int checkwin(){
+        if(     (((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==1)||
+                (((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==1)||
+                (((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==1)||
+                (((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==1)||
+                (((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==1)||
 
-        boolean result = false;
-        int x = move.getInitialPos().getX();
-        int y = move.getInitialPos().getY();
-        int a = move.getFinalPos().getX();
-        int b = move.getFinalPos().getY();
+                (((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==1)||
+                (((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==1)||
+                (((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==1)||
+                (((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==1)||
+                (((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==1)||
 
-        if(grille[x][y]==player.getNumber()){
-            if(((a==x)&&(y!=b))||((b==y)&&(x!=a))){
+                (((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==1)||
+                (((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==1)){
 
-            }
+
+            return 1;
+        }
+        if(     (((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==2)||
+                (((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==2)||
+                (((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==2)||
+                (((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==2)||
+                (((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==2)||
+
+                (((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==2)||
+                (((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==2)||
+                (((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==2)||
+                (((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==2)||
+                (((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==2)||
+
+                (((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==2)||
+                (((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==2)){
+
+            return 2;
         }
 
-        return result;
-
+        return 0;
     }
 
 }

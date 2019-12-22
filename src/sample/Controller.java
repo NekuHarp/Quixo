@@ -134,7 +134,8 @@ public class Controller {
 
     private ImageView[][] grillecase = new ImageView[5][5];
 
-    private Partie game = new Partie(new JoueurHumain(1,false),new JoueurHumain(2,false));
+    //private Partie game = new Partie(new JoueurHumain(1),new JoueurHumain(2));
+    private Partie game = new Partie(new JoueurHumain(1),new JoueurIA(2));
 
     private int joueur;
     private EventHandler<MouseEvent> eventHFirstClick;
@@ -145,6 +146,8 @@ public class Controller {
     private Coord selectedcoord = new Coord(0,0);
 
     public Controller() {
+
+        getInstance();
 
     }
 
@@ -175,7 +178,6 @@ public class Controller {
                 String data = (String) node.getUserData();
                 int x = Character.getNumericValue(data.charAt(0));
                 int y = Character.getNumericValue(data.charAt(1));
-                //System.out.println(x+" "+y);
                 reecrire(joueur,x,y,0);
             }
         };
@@ -187,7 +189,7 @@ public class Controller {
                 int x = Character.getNumericValue(data.charAt(0));
                 int y = Character.getNumericValue(data.charAt(1));
                 reecrire(joueur,x,y,1);
-                if(game.getJoueur2().isIA()==false) {
+                if(!game.getJoueur2().isIA()) {
                     if (joueur == 1) {
                         joueur++;
                     } else {
@@ -196,7 +198,21 @@ public class Controller {
                     resultat = vresult();
                     ecrireresult();
                 } else {
-                    // TODO : IA
+
+                    joueur++;
+                    resultat = vresult();
+                    ecrireresult();
+                    if(resultat==0){
+                        result.setText("Tour de l'IA X");
+                        gamepane.setDisable(true);
+                        Coup iamove = game.getJoueur2().determinerCoup(game);
+                        gamepane.setDisable(false);
+                        reecrire(joueur,iamove.getInitialPos().getX(),iamove.getInitialPos().getY(),0);
+                        reecrire(joueur,iamove.getFinalPos().getX(),iamove.getFinalPos().getY(),1);
+                        joueur--;
+                        resultat = vresult();
+                        ecrireresult();
+                    }
                 }
             }
         };
@@ -372,20 +388,7 @@ public class Controller {
 
         double[][] grille = game.getGrille();
 
-        if(     (((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==1)||
-                (((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==1)||
-                (((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==1)||
-                (((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==1)||
-                (((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==1)||
-
-                (((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==1)||
-                (((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==1)||
-                (((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==1)||
-                (((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==1)||
-                (((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==1)||
-
-                (((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==1)||
-                (((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==1)){
+        if(game.checkwin()==1){
 
             if(((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==1){
                 Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
@@ -473,23 +476,8 @@ public class Controller {
                 Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
                 Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
             }
-
-            return 1;
         }
-        if(     (((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==2)||
-                (((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==2)||
-                (((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==2)||
-                (((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==2)||
-                (((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==2)||
-
-                (((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==2)||
-                (((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==2)||
-                (((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==2)||
-                (((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==2)||
-                (((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==2)||
-
-                (((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==2)||
-                (((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==2)){
+        if(game.checkwin()==2){
 
             if(((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==2){
                 Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
@@ -577,10 +565,9 @@ public class Controller {
                 Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
                 Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
             }
-            return 2;
         }
 
-        return 0;
+        return game.checkwin();
     }
 
     private void deletehandler(){
@@ -624,15 +611,6 @@ public class Controller {
             });
         }
 
-    }
-
-    private void afficheboard(){
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(game.getGrille()[i][j]+" ");
-            }
-            System.out.println(" ");
-        }
     }
 
     private void resetbackground(){
