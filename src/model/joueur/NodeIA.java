@@ -1,4 +1,6 @@
-package model;
+package model.joueur;
+
+import model.Coup;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,7 @@ public abstract class Joueur {
     private int number;
     private boolean isIA;
 
-    public Joueur(int number) {
+    Joueur(int number) {
         this.number = number;
         this.isIA = false;
     }
@@ -17,15 +17,11 @@ public abstract class Joueur {
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
     public boolean isIA() {
         return isIA;
     }
 
-    public void setIA(boolean IA) {
+    void setIA(boolean IA) {
         isIA = IA;
     }
 

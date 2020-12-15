@@ -2,7 +2,6 @@ package model.joueur;
 
 import model.Coord;
 import model.Coup;
-import model.NodeIA;
 import model.Partie;
 
 import java.util.ArrayList;

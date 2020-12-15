@@ -314,7 +314,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="110.0" layoutY="700.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="580.0">
                <children>
-                  <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="589.0">
+                  <SplitPane fx:id="splitpaneforbtn" dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="589.0">
                     <items>
                       <AnchorPane layoutX="50.0" layoutY="50.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" SplitPane.resizableWithParent="false">
                            <children>

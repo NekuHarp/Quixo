@@ -7,9 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import model.Coord;
@@ -22,9 +20,6 @@ public class Controller {
 
     @FXML
     private Pane gamepane;
-
-    @FXML
-    private GridPane grillemorpion;
     @FXML
     private ImageView Img00;
     @FXML
@@ -126,6 +121,8 @@ public class Controller {
     private ImageView Case34;
     @FXML
     private ImageView Case44;
+    @FXML
+    private SplitPane splitpaneforbtn;
 
     @FXML
     private Button resetbtn;
@@ -143,109 +140,92 @@ public class Controller {
     private ImageView[][] grillecase = new ImageView[5][5];
 
     private Partie game = new Partie(new JoueurHumain(1),new JoueurHumain(2));
-    //private Partie game = new Partie(new JoueurHumain(1),new JoueurIA(2));
 
     private int joueur;
     private EventHandler<MouseEvent> eventHFirstClick;
     private EventHandler<MouseEvent> eventHSecondClick;
     private EventHandler<MouseEvent> eventHCancelClick;
     private int resultat;
-    private FadeTransition ft;
     private Coord selectedcoord = new Coord(0,0);
 
     public Controller() {
-
         getInstance();
-
     }
 
     private static Controller instance = new Controller();
 
-    public static Controller getInstance(){
+    private static Controller getInstance(){
         return instance;
     }
 
     @FXML
     private void initialize(){
 
+        SplitPane.Divider divider = splitpaneforbtn.getDividers().get(0);
+        divider.positionProperty().addListener((observable, oldvalue, newvalue) -> divider.setPosition(0.5));
+
         defgrid();
 
         joueur=game.getJoueur1().getNumber();
         iajoueur = false;
 
-        resetbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                reecrire(0,0,0,0);
-                result.setText("Tour de Joueur O");
-            }
+        resetbtn.setOnAction(e -> {
+            reecrire(0,0,0,0);
+            result.setText("Tour de Joueur O");
         });
 
-        changebtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                if(iajoueur){
-                    iajoueur = false;
-                } else {
-                    iajoueur = true;
-                }
-                reecrire(0,0,0,0);
-                result.setText("Tour de Joueur O");
-            }
+        changebtn.setOnAction(e -> {
+            iajoueur=!iajoueur;
+            reecrire(0,0,0,0);
+            result.setText("Tour de Joueur O");
         });
 
-        eventHFirstClick = new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent e) {
-                Node node = (Node) e.getSource() ;
-                String data = (String) node.getUserData();
-                int x = Character.getNumericValue(data.charAt(0));
-                int y = Character.getNumericValue(data.charAt(1));
-                reecrire(joueur,x,y,0);
-            }
+        eventHFirstClick = e -> {
+            Node node = (Node) e.getSource() ;
+            String data = (String) node.getUserData();
+            int x = Character.getNumericValue(data.charAt(0));
+            int y = Character.getNumericValue(data.charAt(1));
+            reecrire(joueur,x,y,0);
         };
 
-        eventHSecondClick = new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent e) {
-                Node node = (Node) e.getSource() ;
-                String data = (String) node.getUserData();
-                int x = Character.getNumericValue(data.charAt(0));
-                int y = Character.getNumericValue(data.charAt(1));
-                reecrire(joueur,x,y,1);
-                if(!iajoueur) {
-                    if (joueur == 1) {
-                        joueur++;
-                    } else {
-                        joueur--;
-                    }
-                    resultat = vresult();
-                    ecrireresult();
-                } else {
+        eventHSecondClick = e -> {
+            Node node = (Node) e.getSource() ;
+            String data = (String) node.getUserData();
+            int x = Character.getNumericValue(data.charAt(0));
+            int y = Character.getNumericValue(data.charAt(1));
+            reecrire(joueur,x,y,1);
+            if(!iajoueur) {
+                if (joueur == 1) {
                     joueur++;
+                } else {
+                    joueur--;
+                }
+                resultat = vresult();
+                ecrireresult();
+            } else {
+                joueur++;
+                resultat = vresult();
+                ecrireresult();
+                if(resultat==0){
+                    result.setText("Tour de l'IA X");
+                    gamepane.setDisable(true);
+                    Coup iamove = game.getJoueur2().determinerCoup(game);
+                    gamepane.setDisable(false);
+                    reecrire(joueur,iamove.getInitialPos().getX(),iamove.getInitialPos().getY(),0);
+                    reecrire(joueur,iamove.getFinalPos().getX(),iamove.getFinalPos().getY(),1);
+                    joueur--;
                     resultat = vresult();
                     ecrireresult();
-                    if(resultat==0){
-                        result.setText("Tour de l'IA X");
-                        gamepane.setDisable(true);
-                        Coup iamove = game.getJoueur2().determinerCoup(game);
-                        gamepane.setDisable(false);
-                        reecrire(joueur,iamove.getInitialPos().getX(),iamove.getInitialPos().getY(),0);
-                        reecrire(joueur,iamove.getFinalPos().getX(),iamove.getFinalPos().getY(),1);
-                        joueur--;
-                        resultat = vresult();
-                        ecrireresult();
-                    }
                 }
             }
         };
 
-        eventHCancelClick = new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent e) {
-                Node node = (Node) e.getSource() ;
-                String data = (String) node.getUserData();
-                int x = Character.getNumericValue(data.charAt(0));
-                int y = Character.getNumericValue(data.charAt(1));
-                reecrire(joueur,x,y,2);
-            }
+        eventHCancelClick = e -> {
+            Node node = (Node) e.getSource() ;
+            String data = (String) node.getUserData();
+            int x = Character.getNumericValue(data.charAt(0));
+            int y = Character.getNumericValue(data.charAt(1));
+            reecrire(joueur,x,y,2);
         };
 
 
@@ -259,6 +239,7 @@ public class Controller {
         //afficheboard();
         deletehandler();
 
+        FadeTransition ft;
         if(event==0) {
             if (jo == 1) {
                 resetbackground();
