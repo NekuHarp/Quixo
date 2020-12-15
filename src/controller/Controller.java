@@ -129,15 +129,21 @@ public class Controller {
 
     @FXML
     private Button resetbtn;
+
+    @FXML
+    private Button changebtn;
+
     @FXML
     private Label result;
+
+    private boolean iajoueur;
 
     private ImageView[][] grilleimg = new ImageView[5][5];
 
     private ImageView[][] grillecase = new ImageView[5][5];
 
-    //private Partie game = new Partie(new JoueurHumain(1),new JoueurHumain(2));
-    private Partie game = new Partie(new JoueurHumain(1),new JoueurIA(2));
+    private Partie game = new Partie(new JoueurHumain(1),new JoueurHumain(2));
+    //private Partie game = new Partie(new JoueurHumain(1),new JoueurIA(2));
 
     private int joueur;
     private EventHandler<MouseEvent> eventHFirstClick;
@@ -165,10 +171,24 @@ public class Controller {
         defgrid();
 
         joueur=game.getJoueur1().getNumber();
+        iajoueur = false;
 
         resetbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                reecrire(0,0,0,0);
+                result.setText("Tour de Joueur O");
+            }
+        });
+
+        changebtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if(iajoueur){
+                    iajoueur = false;
+                } else {
+                    iajoueur = true;
+                }
                 reecrire(0,0,0,0);
                 result.setText("Tour de Joueur O");
             }
@@ -191,7 +211,7 @@ public class Controller {
                 int x = Character.getNumericValue(data.charAt(0));
                 int y = Character.getNumericValue(data.charAt(1));
                 reecrire(joueur,x,y,1);
-                if(!game.getJoueur2().isIA()) {
+                if(!iajoueur) {
                     if (joueur == 1) {
                         joueur++;
                     } else {
@@ -200,7 +220,6 @@ public class Controller {
                     resultat = vresult();
                     ecrireresult();
                 } else {
-
                     joueur++;
                     resultat = vresult();
                     ecrireresult();
@@ -275,6 +294,11 @@ public class Controller {
                 ft.play();
                 selectedcoord = new Coord(x,y);
             } else {
+                if(iajoueur){
+                    game.setJoueur2(new JoueurIA(2));
+                } else {
+                    game.setJoueur2(new JoueurHumain(2));
+                }
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
                         ft = new FadeTransition(Duration.millis(200), grilleimg[i][j]);
@@ -358,12 +382,21 @@ public class Controller {
                     ft.play();
                 }
             }
-            game.allSelectablePieces(game.getJoueur1()).forEach((n) -> {
-                int i = n.getX();
-                int j = n.getY();
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
-                grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
-            });
+            if(jo==1) {
+                game.allSelectablePieces(game.getJoueur1()).forEach((n) -> {
+                    int i = n.getX();
+                    int j = n.getY();
+                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
+                    grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
+                });
+            } else {
+                game.allSelectablePieces(game.getJoueur2()).forEach((n) -> {
+                    int i = n.getX();
+                    int j = n.getY();
+                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
+                    grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
+                });
+            }
         }
     }
 
