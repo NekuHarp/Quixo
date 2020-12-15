@@ -1,9 +1,6 @@
-package sample;
+package controller;
 
 import javafx.animation.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,6 +12,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import model.Coord;
+import model.Coup;
+import model.joueur.JoueurHumain;
+import model.Partie;
+import model.joueur.*;
 
 public class Controller {
 
@@ -241,7 +243,7 @@ public class Controller {
         if(event==0) {
             if (jo == 1) {
                 resetbackground();
-                grillecase[x][y].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_selected.png")));
+                grillecase[x][y].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_selected.png")));
                 ft = new FadeTransition(Duration.millis(200), grillecase[x][y]);
                 ft.setFromValue(0);
                 ft.setToValue(1);
@@ -249,7 +251,7 @@ public class Controller {
                 game.allMoves(new Coord(x,y),game.getJoueur1()).forEach((n) -> {
                     int a = n.getFinalPos().getX();
                     int b = n.getFinalPos().getY();
-                    grillecase[a][b].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                    grillecase[a][b].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                     grilleimg[a][b].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHSecondClick);
                 });
                 grilleimg[x][y].removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHSecondClick);
@@ -260,10 +262,10 @@ public class Controller {
                 game.allMoves(new Coord(x,y),game.getJoueur2()).forEach((n) -> {
                     int a = n.getFinalPos().getX();
                     int b = n.getFinalPos().getY();
-                    grillecase[a][b].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                    grillecase[a][b].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                     grilleimg[a][b].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHSecondClick);
                 });
-                grillecase[x][y].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_selected.png")));
+                grillecase[x][y].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_selected.png")));
                 grilleimg[x][y].removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHSecondClick);
                 grilleimg[x][y].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHCancelClick);
 
@@ -280,14 +282,14 @@ public class Controller {
                         ft.setToValue(0);
                         ft.play();
 
-                        grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+                        grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blank.png")));
 
                         ft = new FadeTransition(Duration.millis(200), grillecase[i][j]);
                         ft.setFromValue(1);
                         ft.setToValue(0);
                         ft.play();
 
-                        grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka.png")));
+                        grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka.png")));
 
                         game.getGrille()[i][j] = 0;
 
@@ -314,7 +316,7 @@ public class Controller {
                 game.allSelectablePieces(game.getJoueur1()).forEach((n) -> {
                     int i = n.getX();
                     int j = n.getY();
-                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                     grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
                 });
 
@@ -343,7 +345,7 @@ public class Controller {
                     ft.setToValue(0);
                     ft.play();
 
-                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka.png")));
+                    grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka.png")));
 
                     ft = new FadeTransition(Duration.millis(200), grillecase[i][j]);
                     ft.setFromValue(0);
@@ -359,7 +361,7 @@ public class Controller {
             game.allSelectablePieces(game.getJoueur1()).forEach((n) -> {
                 int i = n.getX();
                 int j = n.getY();
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                 grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
             });
         }
@@ -391,179 +393,179 @@ public class Controller {
         if(game.checkwin()==1){
 
             if(((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==1){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img01.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img02.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img03.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img01.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img02.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img03.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==1){
-                Img10.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img12.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img14.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img10.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img12.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img14.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==1){
-                Img20.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img21.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img23.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img24.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img20.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img21.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img23.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img24.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==1){
-                Img30.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img32.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img34.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img30.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img32.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img34.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==1){
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img41.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img42.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img43.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img41.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img42.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img43.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
 
             if(((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==1){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img10.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img20.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img30.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img10.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img20.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img30.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==1){
-                Img01.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img21.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img41.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img01.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img21.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img41.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==1){
-                Img02.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img12.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img32.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img42.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img02.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img12.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img32.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img42.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==1){
-                Img03.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img23.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img43.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img03.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img23.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img43.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==1){
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img14.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img24.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img34.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img14.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img24.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img34.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
 
             if(((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==1){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
             if(((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==1){
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/O_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/O_win.png")));
             }
         }
         if(game.checkwin()==2){
 
             if(((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==2){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img01.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img02.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img03.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img01.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img02.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img03.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==2){
-                Img10.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img12.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img14.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img10.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img12.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img14.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[2][0]==grille[2][1])&&(grille[2][1]==grille[2][2])&&(grille[2][2]==grille[2][3])&&(grille[2][3]==grille[2][4]))&&grille[2][0]==2){
-                Img20.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img21.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img23.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img24.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img20.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img21.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img23.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img24.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[3][0]==grille[3][1])&&(grille[3][1]==grille[3][2])&&(grille[3][2]==grille[3][3])&&(grille[3][3]==grille[3][4]))&&grille[3][0]==2){
-                Img30.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img32.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img34.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img30.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img32.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img34.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[4][0]==grille[4][1])&&(grille[4][1]==grille[4][2])&&(grille[4][2]==grille[4][3])&&(grille[4][3]==grille[4][4]))&&grille[4][0]==2){
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img41.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img42.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img43.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img41.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img42.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img43.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
 
             if(((grille[0][0]==grille[1][0])&&(grille[1][0]==grille[2][0])&&(grille[2][0]==grille[3][0])&&(grille[3][0]==grille[4][0]))&&grille[0][0]==2){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img10.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img20.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img30.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img10.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img20.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img30.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[0][1]==grille[1][1])&&(grille[1][1]==grille[2][1])&&(grille[2][1]==grille[3][1])&&(grille[3][1]==grille[4][1]))&&grille[0][1]==2){
-                Img01.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img21.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img41.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img01.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img21.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img41.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[0][2]==grille[1][2])&&(grille[1][2]==grille[2][2])&&(grille[2][2]==grille[3][2])&&(grille[3][2]==grille[4][2]))&&grille[0][2]==2){
-                Img02.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img12.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img32.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img42.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img02.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img12.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img32.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img42.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[0][3]==grille[1][3])&&(grille[1][3]==grille[2][3])&&(grille[2][3]==grille[3][3])&&(grille[3][3]==grille[4][3]))&&grille[0][3]==2){
-                Img03.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img23.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img43.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img03.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img23.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img43.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[0][4]==grille[1][4])&&(grille[1][4]==grille[2][4])&&(grille[2][4]==grille[3][4])&&(grille[3][4]==grille[4][4]))&&grille[0][4]==2){
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img14.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img24.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img34.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img14.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img24.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img34.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
 
             if(((grille[0][0]==grille[1][1])&&(grille[1][1]==grille[2][2])&&(grille[2][2]==grille[3][3])&&(grille[3][3]==grille[4][4]))&&grille[0][0]==2){
-                Img00.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img11.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img33.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img44.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img00.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img11.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img33.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img44.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
             if(((grille[0][4]==grille[1][3])&&(grille[1][3]==grille[2][2])&&(grille[2][2]==grille[3][1])&&(grille[3][1]==grille[4][0]))&&grille[0][4]==2){
-                Img04.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img13.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img22.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img31.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
-                Img40.setImage(new Image(getClass().getResourceAsStream("/sample/images/X_win.png")));
+                Img04.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img13.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img22.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img31.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
+                Img40.setImage(new Image(getClass().getResourceAsStream("/view/images/X_win.png")));
             }
         }
 
@@ -586,27 +588,27 @@ public class Controller {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if(grille[i][j]==0){
-                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blank.png")));
+                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blank.png")));
                 } else if (grille[i][j]==1){
-                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/O.png")));
+                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/O.png")));
                 } else {
-                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/X.png")));
+                    grilleimg[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/X.png")));
                 }
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka.png")));
+                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka.png")));
             }
         }
         if(joueur==1){
             game.allSelectablePieces(game.getJoueur2()).forEach((n) -> {
                 int i = n.getX();
                 int j = n.getY();
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                 grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
             });
         } else {
             game.allSelectablePieces(game.getJoueur1()).forEach((n) -> {
                 int i = n.getX();
                 int j = n.getY();
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka_available.png")));
+                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka_available.png")));
                 grilleimg[i][j].addEventHandler(MouseEvent.MOUSE_CLICKED, eventHFirstClick);
             });
         }
@@ -616,7 +618,7 @@ public class Controller {
     private void resetbackground(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/sample/images/blanka.png")));
+                grillecase[i][j].setImage(new Image(getClass().getResourceAsStream("/view/images/blanka.png")));
             }
         }
     }
