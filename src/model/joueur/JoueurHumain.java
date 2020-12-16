@@ -10,6 +10,7 @@ public class JoueurHumain extends Joueur {
         this.setIA(false);
     }
 
+    // Fonction de jeu.
     public void jouer(Coup move, Partie game){
 
         int x = move.getInitialPos().getX();
@@ -44,6 +45,7 @@ public class JoueurHumain extends Joueur {
 
     }
 
+    // Fonction inutile en tant que joueur humain, mais il est nécessaire de la définir quand-même.
     public Coup determinerCoup(Partie game){
         return null;
     }

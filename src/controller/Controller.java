@@ -152,34 +152,44 @@ public class Controller {
         getInstance();
     }
 
+    // Singleton
     private static Controller instance = new Controller();
 
     private static Controller getInstance(){
         return instance;
     }
 
+    // Fonction d'initialisation
     @FXML
     private void initialize(){
 
+        // Afin d'éviter qu'on puisse changer la taille du SplitPane qui contient les boutons
         SplitPane.Divider divider = splitpaneforbtn.getDividers().get(0);
         divider.positionProperty().addListener((observable, oldvalue, newvalue) -> divider.setPosition(0.5));
 
+        // On appelle defgrid qui va définir les grilles à leurs valeurs de base
         defgrid();
 
+        // On met joueur 1 en tant que joueur courant
         joueur=game.getJoueur1().getNumber();
+
+        // Par défaut, le joueur 2 n'est pas une IA
         iajoueur = false;
 
+        // On met la fonction sur le bouton de remise à zéro
         resetbtn.setOnAction(e -> {
             reecrire(0,0,0,0);
             result.setText("Tour de Joueur O");
         });
 
+        // On met la fonction sur le bouton de changement de type de joueur
         changebtn.setOnAction(e -> {
             iajoueur=!iajoueur;
             reecrire(0,0,0,0);
             result.setText("Tour de Joueur O");
         });
 
+        // Event de clic de souris sur les cases dans le cas d'une première sélection
         eventHFirstClick = e -> {
             Node node = (Node) e.getSource() ;
             String data = (String) node.getUserData();
@@ -188,6 +198,7 @@ public class Controller {
             reecrire(joueur,x,y,0);
         };
 
+        // Event de clic de souris sur les cases dans le cas d'une seconde sélection, pour jouer le coup
         eventHSecondClick = e -> {
             Node node = (Node) e.getSource() ;
             String data = (String) node.getUserData();
@@ -220,6 +231,7 @@ public class Controller {
             }
         };
 
+        // Event de clic de souris sur les images dans le cas d'une annulation de première sélection
         eventHCancelClick = e -> {
             Node node = (Node) e.getSource() ;
             String data = (String) node.getUserData();
@@ -228,17 +240,18 @@ public class Controller {
             reecrire(joueur,x,y,2);
         };
 
-
-
+        // On réécrit la grille sur l'interface
         reecrire(0,0,0, 0);
 
     }
 
+    // Fonction qui met à jour la vue de la grille dans des cas (events) particuliers
+    // Event 0 -> Durant un coup. jo = x -> après que joueur x ait sélectionné la case de base de son coup ; jo = 0 -> début de partie.
+    // Event 1 -> jo x a joué son coup, on actualise.
+    // Event 2 -> Affichage des coups disponibles au début de chaque tour.
     private void reecrire(int jo, int x, int y, int event){
 
-        //afficheboard();
         deletehandler();
-
         FadeTransition ft;
         if(event==0) {
             if (jo == 1) {
@@ -334,7 +347,6 @@ public class Controller {
             } else {
                 game.getJoueur2().jouer(new Coup(selectedcoord,new Coord(x,y)),game);
             }
-            //System.out.println("Board a changé ? "+selectedcoord.getX()+" "+selectedcoord.getY()+" "+x+" "+y);
             actualiser();
 
         } else {
@@ -381,6 +393,7 @@ public class Controller {
         }
     }
 
+    // Fonction d'affichage de résultat si victoire, ou d'affichage du tour en cour.
     private void ecrireresult(){
 
         if(resultat!=0){
@@ -400,6 +413,7 @@ public class Controller {
         }
     }
 
+    // Fonction de vérification des résultats appelée à chaque fin de tour, elle change aussi la couleur des cases qui ont permis la victoire.
     private int vresult(){
 
         double[][] grille = game.getGrille();
@@ -586,6 +600,7 @@ public class Controller {
         return game.checkwin();
     }
 
+    // Fonction pour supprimer les events de clic de souris sur les cases, par exemple quand une partie est terminée.
     private void deletehandler(){
 
         for (int i = 0; i < 5; i++) {
@@ -597,6 +612,7 @@ public class Controller {
         }
     }
 
+    // Fonction pour actualiser la grille visuelle, change aussi l'affichage pour que le joueur sache quelles cases sont sélectionnables.
     private void actualiser(){
         double[][] grille = game.getGrille();
         for (int i = 0; i < 5; i++) {
@@ -629,6 +645,7 @@ public class Controller {
 
     }
 
+    // Fonction qui remet toutes les cases du fond en gris, "non sélectionnables".
     private void resetbackground(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -637,6 +654,7 @@ public class Controller {
         }
     }
 
+    // Fonction de définition des grilles.
     private void defgrid(){
 
         grilleimg[0][0]=Img00;

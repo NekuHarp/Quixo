@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class NodeIA {
 
+    // Comme précisé dans le rapport, cette classe n'est pas utilisée dans le programme car elle aurait dû servir pour le Min-Max.
+
     private int depth;
     private boolean win;
     private ArrayList<Coup> couplist = new ArrayList<Coup>();

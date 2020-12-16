@@ -18,6 +18,7 @@ public class JoueurIA extends Joueur {
         this.setIA(true);
     }
 
+    // Fonction de jeu.
     public void jouer(Coup move, Partie game){
 
         int x = move.getInitialPos().getX();
@@ -52,6 +53,7 @@ public class JoueurIA extends Joueur {
 
     }
 
+    // Appelle la fonction randomIA, aurait dû faire partie de la fonction Min-Max.
     public Coup determinerCoup(Partie game){
 
         return randomIA(game);
@@ -103,7 +105,8 @@ public class JoueurIA extends Joueur {
         }*/
     }
 
-    private NodeIA playIA(Partie game, NodeIA node) {
+    // Fonction de récursivité non-fonctionnelle, mise en commentaire.
+    /*private NodeIA playIA(Partie game, NodeIA node) {
 
         ArrayList<ArrayList<Coup>> listcouplist = new ArrayList<ArrayList<Coup>>();
         //double[][] grille = game.getGrille();
@@ -207,8 +210,9 @@ public class JoueurIA extends Joueur {
                 return new NodeIA(5,false,listcouplist.get(0),listcouplist.get(0).get(0));
             }
         }
-    }
+    }*/
 
+    // Fonction de remplacement du Min-Max, qui choisit juste un coup au hasard parmi les coups disponibles.
     private Coup randomIA(Partie game){
         Random random = new Random();
         double[][] grille = new double[5][5];

@@ -47,6 +47,7 @@ public class Partie {
         this.joueur2 = joueur2;
     }
 
+    // Fonction qui retourne les coordonnées de toutes les cases sélectionnables par un joueur, pour le premier temps du coup.
     public ArrayList<Coord> allSelectablePieces(Joueur player){
 
         ArrayList<Coord> listresult = new ArrayList<Coord>();
@@ -63,6 +64,7 @@ public class Partie {
         return listresult;
     }
 
+    // Fonction qui détermine tous les coups possibles d'un joueur à partir des coordonnées d'une case sélectionnée.
     public ArrayList<Coup> allMoves(Coord initpos, Joueur player){
 
         ArrayList<Coup> listresult = new ArrayList<Coup>();
@@ -86,6 +88,7 @@ public class Partie {
         return listresult;
     }
 
+    // Fonction qui vérifie s'il y a une victoire. Retourne x si joueur x a gagné, retourne 0 sinon.
     public int checkwin(){
         if(     (((grille[0][0]==grille[0][1])&&(grille[0][1]==grille[0][2])&&(grille[0][2]==grille[0][3])&&(grille[0][3]==grille[0][4]))&&grille[0][0]==1)||
                 (((grille[1][0]==grille[1][1])&&(grille[1][1]==grille[1][2])&&(grille[1][2]==grille[1][3])&&(grille[1][3]==grille[1][4]))&&grille[1][0]==1)||
